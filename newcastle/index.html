@@ -14,12 +14,33 @@
         h1 {
             color: green;
         }
+
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+        }
+
+        .bg {
+            -webkit-transform: rotate(270deg);
+            -moz-transform: rotate(270deg);
+            -ms-transform: rotate(270deg);
+            -o-transform: rotate(270deg);
+            transform: rotate(270deg);
+            /* Full height */
+            height: 100%;
+
+            /* Center and scale the image nicely */
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
     </style>
 </head>
 
 <body>
     <center>
-        <img class="rotate_image" id="main" src="https://connected-display.herokuapp.com/uploads/shelf-newcastle.jpg"
+        <img class="bg" id="main" src="https://connected-display.herokuapp.com/uploads/shelf-newcastle.jpg"
             alt="Camera Image">
     </center>
 </body>
