@@ -2,38 +2,37 @@
 <html>
 
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        body,
-        html {
-            height: 100%;
+        html,
+        body {
             margin: 0;
+            padding: 0;
+            height: 100%;
         }
 
-        .bg {
-            -webkit-transform: rotate(270deg);
-            -moz-transform: rotate(270deg);
-            -ms-transform: rotate(270deg);
-            -o-transform: rotate(270deg);
-            transform: rotate(270deg);
-
-            background-image: url("https://shapingstuff.github.io/newcastle/shelf-newcastle.jpg");
-
-            /* Full height */
+        .container {
+            position: relative;
+            width: 100%;
             height: 100%;
+        }
 
-            /* Center and scale the image nicely */
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
+        .fullscreen-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: auto;
+            transform-origin: left top;
+            transform: rotate(270deg) translate(-100%, 0);
         }
     </style>
 </head>
 
 <body>
-
-    <div class="bg"></div>
-
+    <div class="container">
+        <img class="fullscreen-image" src="shelf-newcastle.jpg" alt="Full-Screen Image">
+    </div>
+    <!-- Content of your webpage goes here -->
 </body>
 
 </html>

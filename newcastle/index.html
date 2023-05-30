@@ -2,15 +2,36 @@
 <html>
 
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=5">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
         .fullscreen-image {
-            transform: rotate(270deg);
-            filter: contrast(130%) brightness(110%);
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: auto;
+            transform-origin: left top;
+            transform: rotate(270deg) translate(-100%, 0);
         }
     </style>
+
 </head>
-<img class="fullscreen-image" id="main" src="shelf-newcastle.jpg" alt="Camera Image">
+<div class="container">
+    <img class="fullscreen-image" id="main" src="shelf-newcastle.jpg" alt="Camera Image">
+</div>
 </body>
 
 <script>
