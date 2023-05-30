@@ -38,15 +38,12 @@
 
 <body>
     <center>
-        <img class="bg" id="main" src="shelf-newcastle.jpg">
         <!-- <img class="bg" id="main" src="https://connected-display.herokuapp.com/uploads/shelf-newcastle.jpg"> -->
     </center>
 </body>
 
 <script>
-
     setInterval(refreshImage, 5000)
-
     function refreshImage(imgElement, imgURL) {
         // create a new timestamp
         console.log("refresh");
@@ -54,7 +51,6 @@
         var el = document.getElementById("main");
         el.src = "https://connected-display.herokuapp.com/uploads/shelf-newcastle.jpg?t=" + timestamp;
     }
-
 </script>
 
 </html>
