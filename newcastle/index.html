@@ -3,31 +3,35 @@
 
 <head>
     <style>
-        body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
+        .bg {
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
         }
 
-        .rotate_image {
+        .bg img {
             -webkit-transform: rotate(270deg);
             -moz-transform: rotate(270deg);
             -ms-transform: rotate(270deg);
             -o-transform: rotate(270deg);
             transform: rotate(270deg);
-
-            padding: 0;
-            display: block;
-            margin: 0 auto;
-            max-height: 100%;
-            max-width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            min-width: 50%;
+            min-height: 50%;
         }
     </style>
 </head>
 
 <body>
     <center>
-        <img class="rotate_image" id="main" src="shelf-newcastle.jpg" alt="Camera Image">
+        <img class="bg" id="main" src="shelf-newcastle.jpg" alt="Camera Image">
     </center>
 </body>
 
@@ -40,7 +44,7 @@
         console.log("refresh");
         var timestamp = new Date().getTime();
         var el = document.getElementById("main");
-        el.src = "https://connected-display.herokuapp.com/uploads/display-london.jpg?t=" + timestamp;
+        el.src = "https://connected-display.herokuapp.com/uploads/shelf-newcastle.jpg?t=" + timestamp;
     }
 
 </script>
