@@ -3,57 +3,46 @@
 
 <head>
     <style>
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
         .rotate_image {
             -webkit-transform: rotate(270deg);
             -moz-transform: rotate(270deg);
             -ms-transform: rotate(270deg);
             -o-transform: rotate(270deg);
             transform: rotate(270deg);
-        }
 
-        h1 {
-            color: green;
-        }
-
-        body,
-        html {
-            height: 100%;
-            margin: 0;
-        }
-
-        .bg {
-            background-image: url("shelf-newcastle.jpg");
-            -webkit-transform: rotate(270deg);
-            -moz-transform: rotate(270deg);
-            -ms-transform: rotate(270deg);
-            -o-transform: rotate(270deg);
-            transform: rotate(270deg);
-            height: 100%;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
+            padding: 0;
+            display: block;
+            margin: 0 auto;
+            max-height: 100%;
+            max-width: 100%;
         }
     </style>
 </head>
 
 <body>
-    Version 6
     <center>
-        <!-- <img class="bg" id="main" src="https://connected-display.herokuapp.com/uploads/shelf-newcastle.jpg"> -->
-        <div class="bg"></div>
-
+        <img class="rotate_image" id="main" src="shelf-newcastle.jpg" alt="Camera Image">
     </center>
 </body>
 
 <script>
+
     setInterval(refreshImage, 5000)
+
     function refreshImage(imgElement, imgURL) {
         // create a new timestamp
         console.log("refresh");
         var timestamp = new Date().getTime();
         var el = document.getElementById("main");
-        el.src = "shelf-newcastle.jpg?t=" + timestamp;
+        el.src = "https://connected-display.herokuapp.com/uploads/display-london.jpg?t=" + timestamp;
     }
+
 </script>
 
 </html>

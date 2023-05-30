@@ -11,7 +11,12 @@
         }
 
         .bg {
-            /* The image used */
+            -webkit-transform: rotate(270deg);
+            -moz-transform: rotate(270deg);
+            -ms-transform: rotate(270deg);
+            -o-transform: rotate(270deg);
+            transform: rotate(270deg);
+
             background-image: url("https://shapingstuff.github.io/newcastle/shelf-newcastle.jpg");
 
             /* Full height */
@@ -28,9 +33,6 @@
 <body>
 
     <div class="bg"></div>
-
-    <p>This example creates a full page background image. Try to resize the browser window to see how it always will
-        cover the full screen (when scrolled to top), and that it scales nicely on all screen sizes.</p>
 
 </body>
 
