@@ -16,7 +16,7 @@
 </head>
 
 <body>
-    <canvas id="myCanvas"></canvas>
+    <canvas id="myCanvas" width="1200" height="2000"></canvas>
 
     <script>
         // Get a reference to the canvas element
@@ -25,27 +25,14 @@
         // Get the 2D rendering context of the canvas
         var ctx = canvas.getContext("2d");
 
-        // Set the canvas size to match the viewport
-        function setCanvasSize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            drawImageOnCanvas();
-        }
-
-        // Call the function initially
-        setCanvasSize();
-
-        // Call the function whenever the window is resized
-        window.addEventListener("resize", setCanvasSize);
-
         // Create an image object
         var image = new Image();
 
         // Specify the source of the image
         image.src = "shelf-newcastle.jpg";
 
-        // Function to draw the image on the canvas
-        function drawImageOnCanvas() {
+        // When the image is loaded, draw and transform it on the canvas
+        image.onload = function () {
             // Clear the canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -57,10 +44,10 @@
             ctx.rotate((90 * Math.PI) / 180);
 
             // Set the desired position and size of the image
-            var x = 50;
-            var y = 50;
-            var width = 200;
-            var height = 150;
+            var x = 0;
+            var y = 0;
+            var width = 3000;
+            var height = 5000;
 
             // Move the image by applying translation
             ctx.translate(x, y);
@@ -79,10 +66,7 @@
 
             // Restore the previous state of the context
             ctx.restore();
-        }
-
-        // When the image is loaded, draw it on the canvas
-        image.onload = drawImageOnCanvas;
+        };
     </script>
 </body>
 
