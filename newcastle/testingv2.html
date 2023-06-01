@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="myCanvas" width="1200" height="2000"></canvas>
+
+    <script>
+        // Get a reference to the canvas element
+        var canvas = document.getElementById("myCanvas");
+
+        // Get the 2D rendering context of the canvas
+        var ctx = canvas.getContext("2d");
+
+        // Create an image object
+        var image = new Image();
+
+        // Specify the source of the image
+        image.src = "shelf-newcastle.jpg";
+
+        // When the image is loaded, draw and transform it on the canvas
+        image.onload = function () {
+            // Clear the canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Save the current state of the context
+            ctx.save();
+
+            // Translate and rotate the canvas
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            ctx.rotate((90 * Math.PI) / 180);
+
+            // Set the desired position and size of the image
+            var x = (0) - 200;
+            var y = 0;
+            var width = 1200;
+            var height = 1600;
+
+            // Move the image by applying translation
+            ctx.translate(x, y);
+
+            // Scale the image to the desired width and height
+            ctx.scale(width / image.height, height / image.width);
+
+            // Draw the rotated and transformed image
+            ctx.drawImage(
+                image,
+                -image.width / 2,
+                -image.height / 2,
+                image.width,
+                image.height
+            );
+
+            // Restore the previous state of the context
+            ctx.restore();
+        };
+    </script>
+</body>
+
+</html>
