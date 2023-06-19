@@ -54,12 +54,6 @@
             var image = new Image();
             image.src = imageFiles[index];
 
-            if (index < imageFiles.length - 1) {
-                index++;
-            } else {
-                index = 0;
-            }
-
             image.onload = function () {
                 offscreenCtx.clearRect(0, 0, canvas.width, canvas.height);
                 offscreenCtx.save();
@@ -84,10 +78,16 @@
                 offscreenCtx.restore();
                 offscreenCtx.font = "30px Arial";
                 offscreenCtx.fillStyle = "white";
-                offscreenCtx.fillText(imageLocation[index], 10, 2000 - 20);
+                offscreenCtx.fillText(imageLocation[index], 20, 2000 - 40);
 
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx.drawImage(offscreenCanvas, 0, 0);
+
+                if (index < imageFiles.length - 1) {
+                    index++;
+                } else {
+                    index = 0;
+                }
             };
         }
     </script>
