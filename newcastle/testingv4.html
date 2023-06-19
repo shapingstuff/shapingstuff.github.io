@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+            border: 2px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="myCanvas"></canvas>
+    <canvas id="myCanvas"></canvas>
+    <script>
+        var imageFiles = [
+            "shelf-newcastle.jpg",
+            "shelf-london.jpg",
+            "shelf-liverpool.jpg",
+            "shelf-portable.jpg"
+        ];
+        var imageLocation = [
+            "CoCreate",
+            "Interaction Research Studio",
+            "Mike's Place",
+            "On the Move"
+        ];
+
+        var timeInMins = 1;
+        var index = 0;
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+        var offscreenCanvas = document.createElement("canvas");
+        var offscreenCtx = offscreenCanvas.getContext("2d");
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        offscreenCanvas.width = canvas.width;
+        offscreenCanvas.height = canvas.height;
+
+        timeInMins = 1 * 60000;
+        refreshImage();
+        setInterval(refreshImage, timeInMins);
+
+        function refreshImage() {
+            console.log(index);
+
+            var image = new Image();
+            image.src = imageFiles[index];
+
+            if (index < imageFiles.length - 1) {
+                index++;
+            } else {
+                index = 0;
+            }
+
+            image.onload = function () {
+                offscreenCtx.clearRect(0, 0, canvas.width, canvas.height);
+                offscreenCtx.save();
+                offscreenCtx.translate(canvas.width / 2, canvas.height / 2);
+                offscreenCtx.rotate((90 * Math.PI) / 180);
+
+                var x = 0;
+                var y = 0;
+                var width = 1500;
+                var height = 2000;
+
+                offscreenCtx.translate(x, y);
+                offscreenCtx.scale(width / image.height, height / image.width);
+
+                offscreenCtx.drawImage(
+                    image,
+                    -image.width / 2,
+                    -image.height / 2,
+                    image.width,
+                    image.height
+                );
+                offscreenCtx.restore();
+                offscreenCtx.font = "30px Arial";
+                offscreenCtx.fillStyle = "white";
+                offscreenCtx.fillText(imageLocation[index], 1500 - 5, 2000 / 2);
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(offscreenCanvas, 0, 0);
+            };
+        }
+    </script>
+</body>
+
+</html>

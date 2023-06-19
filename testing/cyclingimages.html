@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+            border: 2px solid black;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script>
+        function rotateImage(canvas, image, x, y, width, height) {
+            // Create a new context for the canvas.
+            var ctx = canvas.getContext("2d");
+
+            // Rotate the image by 90 degrees.
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(90 * Math.PI / 180);
+
+            // Draw the image to the canvas.
+            ctx.drawImage(image, 0, 0, width, height);
+
+            // Restore the context.
+            ctx.restore();
+        }
+
+        // Get the width and height of the viewport.
+        var viewportWidth = window.innerWidth;
+        var viewportHeight = window.innerHeight;
+
+        // Create a new canvas that fits the viewport.
+        var canvas = document.createElement("canvas");
+        canvas.width = viewportWidth;
+        canvas.height = viewportHeight;
+
+        // Load the images into the canvas.
+        var image = new Image();
+        image.src = "shelf-london.jpg";
+        var image1 = new Image();
+        image1.src = "shelf-london.jpg";
+        var image2 = new Image();
+        image2.src = "shelf-newcastle.jpg";
+        var image3 = new Image();
+        image3.src = "shelf-liverpool.jpg";
+
+        image1.onload = function () {
+            // Display the image on the page.
+            document.body.appendChild(canvas);
+
+            // SetInterval to change the image every 500ms.
+            setInterval(function () {
+                // Get the current image src.
+                var currentSrc = image.src;
+
+                // Cycle through the images.
+                if (currentSrc === image1.src) {
+                    image.src = image2.src;
+                } else if (currentSrc === image2.src) {
+                    image.src = image3.src;
+                } else {
+                    image.src = image1.src;
+                }
+
+                // Rotate the image by 90 degrees.
+                rotateImage(canvas, image, 0, 0, viewportWidth, viewportHeight);
+            }, 500);
+        };
+    </script>
+</body>
+
+</html>
