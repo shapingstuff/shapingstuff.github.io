@@ -26,9 +26,9 @@
             "shelf-portable.jpg"
         ];
         var imageLocation = [
-            "CoCreate",
+            "CoCreate Studio",
             "Interaction Research Studio",
-            "Mike's Place",
+            "Mike's Studio",
             "On the Move"
         ];
 
@@ -76,6 +76,10 @@
                     image.height
                 );
                 offscreenCtx.restore();
+                offscreenCtx.shadowColor = "rgba(255, 255, 255, 0.5)"; // Adjust the shadow color and opacity
+                offscreenCtx.shadowBlur = 20; // Adjust the shadow blur radius
+                offscreenCtx.lineWidth = 2; // Adjust the stroke width
+                offscreenCtx.strokeStyle = "rgba(255, 255, 255, 0.5)"; // Adjust the stroke color and opacity
                 offscreenCtx.font = "50px Arial";
                 offscreenCtx.fillStyle = "white";
                 offscreenCtx.fillText(imageLocation[index], 40, 2000 - 40);
