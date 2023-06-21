@@ -114,14 +114,11 @@
             console.log("Touched");
             clearInterval(intervalId);
             preview();
-            previewId = setInterval(preview, previewUpdateTime);
         }
 
         function handleTouchEnd(event) {
             event.preventDefault();
             console.log("Un-Touched");
-            clearInterval(previewId);
-
             refreshImage();
             intervalId = setInterval(refreshImage, timeInMins);
         }
