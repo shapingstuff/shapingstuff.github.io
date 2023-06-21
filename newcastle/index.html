@@ -2,52 +2,128 @@
 <html>
 
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        html,
         body {
             margin: 0;
-            padding: 0;
-            height: 100%;
+            overflow: hidden;
         }
 
-        .container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
-
-        .fullscreen-image {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100vw;
-            height: calc(100vw * 1200 / 1600);
-            transform-origin: bottom left;
-            transform: rotate(90deg);
+        canvas {
+            display: block;
         }
     </style>
-
 </head>
 
-<div class="container">
-    <img class="fullscreen-image" id="main" src="https://connected-display.herokuapp.com/uploads/shelf-newcastle.jpg"
-        alt="Camera Image">
-</div>
+<body>
+    <canvas id="myCanvas"></canvas>
+    <script>
+
+        var previewImage = "https://connected-display.herokuapp.com/uploads/shelf-newcastle.jpg";
+        var imageFiles = [
+            "shelf-london.jpg",
+            "shelf-liverpool.jpg",
+            "shelf-portable.jpg"
+        ];
+        var imageText = [
+            "Interaction Research Studio",
+            "Mike's Studio",
+            "On the Move"
+        ];
+
+        var timeInMins = 1;
+        var previewUpdateTime = 5000;
+        var index = 0;
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+        var offscreenCanvas = document.createElement("canvas");
+        var offscreenCtx = offscreenCanvas.getContext("2d");
+        var intervalId = null;
+        var previewId = null;
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        offscreenCanvas.width = canvas.width;
+        offscreenCanvas.height = canvas.height;
+
+        timeInMins = 1000;
+        refreshImage();
+        intervalId = setInterval(refreshImage, timeInMins);
+
+        // display the rotated image with text on the screen
+        function displayImage(imageFile, text) {
+            var timestamp = new Date().getTime(); // force refresh from cache
+            var image = new Image();
+            image.src = imageFile + "?timestamp=" + timestamp;
+            image.onload = function () {
+                offscreenCtx.clearRect(0, 0, canvas.width, canvas.height);
+                offscreenCtx.save();
+                offscreenCtx.translate(canvas.width / 2, canvas.height / 2);
+                offscreenCtx.rotate((90 * Math.PI) / 180);
+
+                var x = 0;
+                var y = 0;
+                var width = 1500;
+                var height = 2000;
+
+                offscreenCtx.translate(x, y);
+                offscreenCtx.scale(width / image.height, height / image.width);
+
+                offscreenCtx.drawImage(
+                    image,
+                    -image.width / 2,
+                    -image.height / 2,
+                    image.width,
+                    image.height
+                );
+                offscreenCtx.restore();
+                offscreenCtx.font = "30px Arial";
+                offscreenCtx.fillStyle = "white";
+                offscreenCtx.fillText(text, 40, 2000 - 40);
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(offscreenCanvas, 0, 0);
+            }
+        }
+
+        // change index and refresh image
+        function refreshImage() {
+            console.log(index);
+            displayImage(imageFiles[index], imageText[index]);
+            if (index < imageFiles.length - 1) {
+                index++;
+            } else {
+                index = 0;
+            }
+        };
+
+        function preview() {
+            displayImage(previewImage, "Preview");
+            console.log("preview update");
+        }
+
+        // Event listeners for touch and mouse press
+        canvas.addEventListener('touchstart', handleTouchStart);
+        canvas.addEventListener('mousedown', handleTouchStart);
+
+        canvas.addEventListener('touchend', handleTouchEnd);
+        canvas.addEventListener('touchcancel', handleTouchEnd);
+        canvas.addEventListener('mouseup', handleTouchEnd);
+
+        function handleTouchStart(event) {
+            event.preventDefault();
+            console.log("Touched");
+            clearInterval(intervalId);
+            preview();
+        }
+
+        function handleTouchEnd(event) {
+            event.preventDefault();
+            console.log("Un-Touched");
+            refreshImage();
+            intervalId = setInterval(refreshImage, timeInMins);
+        }
+
+    </script>
 </body>
-
-<script>
-
-    setInterval(refreshImage, 5000)
-
-    function refreshImage(imgElement, imgURL) {
-        // create a new timestamp
-        console.log("refresh");
-        var timestamp = new Date().getTime();
-        var el = document.getElementById("main");
-        el.src = "https://connected-display.herokuapp.com/uploads/shelf-newcastle.jpg?t=" + timestamp;
-    }
-
-</script>
 
 </html>
