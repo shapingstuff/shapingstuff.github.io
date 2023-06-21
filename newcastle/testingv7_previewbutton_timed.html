@@ -31,7 +31,7 @@
         ];
 
         var timeInMins = 1;
-        var previewUpdateTime = 2000;
+        var previewUpdateTime = 5000;
         var index = 0;
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
@@ -45,7 +45,7 @@
         offscreenCanvas.width = canvas.width;
         offscreenCanvas.height = canvas.height;
 
-        timeInMins = 1 * 60000;
+        timeInMins = 1000;
         refreshImage();
         intervalId = setInterval(refreshImage, timeInMins);
 
@@ -109,43 +109,18 @@
         canvas.addEventListener('touchcancel', handleTouchEnd);
         canvas.addEventListener('mouseup', handleTouchEnd);
 
-
-        var touchStartX = 0;
-        var touchStartY = 0;
-        var touchThreshold = 50; // Adjust this value to set the touch threshold
-
         function handleTouchStart(event) {
             event.preventDefault();
-            touchStartX = event.touches[0].clientX;
-            touchStartY = event.touches[0].clientY;
-            console.log("Screen touched!");
+            console.log("Touched");
             clearInterval(intervalId);
-            if (isWithinThreshold(event.touches[0])) {
-                event.preventDefault();
-                console.log("Screen touched!");
-                clearInterval(intervalId);
-                preview();
-                previewId = setInterval(preview, previewUpdateTime);
-            }
+            preview();
         }
 
         function handleTouchEnd(event) {
             event.preventDefault();
-            console.log("Screen not touched!");
-            clearInterval(previewId);
-            if (isWithinThreshold(event.changedTouches[0])) {
-                event.preventDefault();
-                console.log("Screen not touched!");
-                clearInterval(previewId);
-                refreshImage();
-                intervalId = setInterval(refreshImage, timeInMins);
-            }
-        }
-
-        function isWithinThreshold(touch) {
-            var deltaX = Math.abs(touch.clientX - touchStartX);
-            var deltaY = Math.abs(touch.clientY - touchStartY);
-            return deltaX < touchThreshold && deltaY < touchThreshold;
+            console.log("Un-Touched");
+            refreshImage();
+            intervalId = setInterval(refreshImage, timeInMins);
         }
 
     </script>

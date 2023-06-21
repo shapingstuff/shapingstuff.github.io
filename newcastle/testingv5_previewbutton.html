@@ -16,7 +16,6 @@
 
 <body>
     <canvas id="myCanvas"></canvas>
-    <canvas id="myCanvas"></canvas>
     <script>
 
         var previewImage = "https://connected-display.herokuapp.com/uploads/shelf-newcastle.jpg";
@@ -39,6 +38,7 @@
         var offscreenCanvas = document.createElement("canvas");
         var offscreenCtx = offscreenCanvas.getContext("2d");
         var intervalId = null; // Store the interval ID
+        var previewId = null;
 
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -104,20 +104,12 @@
         // Event listeners for touch and mouse press
         canvas.addEventListener('touchstart', handleTouchStart);
         canvas.addEventListener('touchend', handleTouchEnd);
-        canvas.addEventListener('mousedown', handleMouseDown);
-        canvas.addEventListener('mouseup', handleMouseUp);
+        canvas.addEventListener('mousedown', handleTouchStart);
+        canvas.addEventListener('mouseup', handleTouchEnd);
 
         function handleTouchStart(event) {
             event.preventDefault();
-            console.log("Screen touched!");
-            clearInterval(intervalId);
-            preview();
-            previewId = setInterval(preview, previewUpdateTime);
-        }
-
-        function handleMouseDown(event) {
-            event.preventDefault();
-            console.log("Screen touched!");
+            console.log("Touched");
             clearInterval(intervalId);
             preview();
             previewId = setInterval(preview, previewUpdateTime);
@@ -125,15 +117,7 @@
 
         function handleTouchEnd(event) {
             event.preventDefault();
-            console.log("Screen not touched!");
-            clearInterval(previewId);
-            refreshImage();
-            intervalId = setInterval(refreshImage, timeInMins);
-        }
-
-        function handleMouseUp(event) {
-            event.preventDefault();
-            console.log("Screen not touched!");
+            console.log("Un-touched");
             clearInterval(previewId);
             refreshImage();
             intervalId = setInterval(refreshImage, timeInMins);
