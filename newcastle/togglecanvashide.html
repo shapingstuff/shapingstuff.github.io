@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #canvasContainer {
+            position: relative;
+        }
+
+        canvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        #toggleButton {
+            position: absolute;
+            opacity: 0;
+            width: 1500px;
+            height: 2000px;
+            top: 0px;
+            left: 0px;
+            z-index: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="canvasContainer">
+        <canvas id="canvas1" width="1500" height="2000" ;"></canvas>
+        <canvas id="canvas2" width="1500" height="2000" ; display: none;"></canvas>
+    </div>
+    <button id="toggleButton">Toggle Canvas</button>
+
+    <script>
+        var canvasContainer = document.getElementById('canvasContainer');
+        var toggleButton = document.getElementById('toggleButton');
+
+        var offscreenCanvas = document.createElement("canvas");
+        var offscreenCtx = offscreenCanvas.getContext("2d");
+
+        var intervalId = null;
+        var previewId = null;
+
+        var index = 0;
+
+        var previewImage = "https://connected-display.herokuapp.com/uploads/shelf-newcastle.jpg";
+        var imageFiles = [
+            "shelf-london.jpg",
+            "shelf-liverpool.jpg",
+            "shelf-portable.jpg"
+        ];
+        var imageText = [
+            "Interaction Research Studio",
+            "Mike's Studio",
+            "On the Move"
+        ];
+
+        var transitionTime = 2000;
+        var previewTime = 1000;
+
+        refreshImage();
+        setInterval(refreshImage, transitionTime);
+        preview();
+        setInterval(preview, previewTime);
+
+        function preview() {
+            displayImage(previewImage, "Preview", "canvas1");
+        }
+
+        function toggleCanvas() {
+            if (canvas1.style.display === 'none') {
+                canvas1.style.display = 'block';
+                canvas2.style.display = 'none';
+            } else {
+                canvas1.style.display = 'none';
+                canvas2.style.display = 'block';
+            }
+        }
+
+        toggleButton.addEventListener('click', toggleCanvas);
+
+        // refresh the image with timer
+        function refreshImage() {
+            console.log(index);
+            displayImage(imageFiles[index], imageText[index], "canvas2");
+            if (index < imageFiles.length - 1) {
+                index++;
+            } else {
+                index = 0;
+            }
+        }
+
+        // pass the canvas ID and image to show
+        // display the rotated image with text on the screen
+        function displayImage(imageFile, text, canvasID) {
+            var canvas = document.getElementById(canvasID);
+            var ctx = canvas.getContext("2d");
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            offscreenCanvas.width = canvas.width;
+            offscreenCanvas.height = canvas.height;
+
+            var timestamp = new Date().getTime(); // force refresh from cache
+            var image = new Image();
+            image.src = imageFile + "?timestamp=" + timestamp;
+            image.onload = function () {
+                offscreenCtx.clearRect(0, 0, canvas.width, canvas.height);
+                offscreenCtx.save();
+                offscreenCtx.translate(canvas.width / 2, canvas.height / 2);
+                offscreenCtx.rotate((90 * Math.PI) / 180);
+
+                var x = 0;
+                var y = 0;
+                var width = 1500;
+                var height = 2000;
+
+                offscreenCtx.translate(x, y);
+                offscreenCtx.scale(width / image.height, height / image.width);
+
+                offscreenCtx.drawImage(
+                    image,
+                    -image.width / 2,
+                    -image.height / 2,
+                    image.width,
+                    image.height
+                );
+                offscreenCtx.restore();
+                offscreenCtx.font = "30px Arial";
+                offscreenCtx.fillStyle = "white";
+                offscreenCtx.fillText(text, 40, 2000 - 40);
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(offscreenCanvas, 0, 0);
+            }
+        }
+    </script>
+</body>
+
+</html>
