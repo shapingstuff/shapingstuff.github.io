@@ -19,6 +19,7 @@
     <script>
 
         var previewImage = "https://connected-display.herokuapp.com/uploads/shelf-newcastle.jpg";
+        var previewText = "Preview - CoCreate Studio"
         var imageFiles = [
             "https://connected-display.herokuapp.com/uploads/shelf-london.jpg",
             "https://connected-display.herokuapp.com/uploads/shelf-liverpool.jpg",
@@ -30,7 +31,7 @@
             "On the Move"
         ];
 
-        var timeInMins = 1;
+        var timeInMins = 5;
         var previewUpdateTime = 2000;
         var index = 0;
         var canvas = document.getElementById("myCanvas");
@@ -90,17 +91,41 @@
         // change index and refresh image
         function refreshImage() {
             console.log(index);
-            displayImage(imageFiles[index], imageText[index]);
-            if (index < imageFiles.length - 1) {
-                index++;
-            } else {
-                index = 0;
-            }
+
+            checkImageAvailability(imageFiles[index])
+                .then(function () {
+                    console.log("Image is available");
+                    // load image and change index for next
+                    displayImage(imageFiles[index], imageText[index]);
+                    if (index < imageFiles.length - 1) {
+                        index++;
+                    } else {
+                        index = 0;
+                    }
+                })
+                .catch(function () {
+                    console.log("Image is not available");
+                    // move on and refresh imediately
+                    if (index < imageFiles.length - 1) {
+                        index++;
+                    } else {
+                        index = 0;
+                    }
+                    refreshImage();
+                });
         };
 
         function preview() {
-            displayImage(previewImage, "Preview");
-            console.log("preview update");
+            checkImageAvailability(previewImage)
+                .then(function () {
+                    console.log("Image is available");
+                    displayImage(previewImage, "Preview");
+                    console.log("preview update");
+                })
+                .catch(function () {
+                    console.log("Image is not available");
+                    displayImage("defaulterror.jpg", imageText[index]);
+                });
         }
 
         // Event listeners for touch and mouse press
@@ -116,13 +141,29 @@
             } else {
 
             }
-
         }
 
         function startSlideshow() {
             refreshImage();
             intervalId = setInterval(refreshImage, timeInMins);
             timer = false;
+        }
+
+        function checkImageAvailability(url) {
+            return fetch(url, { method: 'HEAD' })
+                .then(response => {
+                    if (response.ok) {
+                        // Image exists and was successfully fetched
+                        return Promise.resolve();
+                    } else {
+                        // Image does not exist or encountered an error (e.g., 404)
+                        return Promise.reject();
+                    }
+                })
+                .catch(() => {
+                    // Error occurred during fetch (network error, CORS, etc.)
+                    return Promise.reject();
+                });
         }
 
     </script>

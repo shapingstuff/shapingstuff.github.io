@@ -55,30 +55,33 @@
             image.src = imageFiles[index];
 
             image.onload = function () {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.save();
-                ctx.translate(canvas.width / 2, canvas.height / 2);
-                ctx.rotate((90 * Math.PI) / 180);
+                offscreenCtx.clearRect(0, 0, canvas.width, canvas.height);
+                offscreenCtx.save();
+                offscreenCtx.translate(canvas.width / 2, canvas.height / 2);
+                offscreenCtx.rotate((90 * Math.PI) / 180);
 
                 var x = 0;
                 var y = 0;
                 var width = 1500;
                 var height = 2000;
 
-                ctx.translate(x, y);
-                ctx.scale(width / image.height, height / image.width);
+                offscreenCtx.translate(x, y);
+                offscreenCtx.scale(width / image.height, height / image.width);
 
-                ctx.drawImage(
+                offscreenCtx.drawImage(
                     image,
                     -image.width / 2,
                     -image.height / 2,
                     image.width,
                     image.height
                 );
-                ctx.restore();
-                ctx.font = "30px Arial";
-                ctx.fillStyle = "white";
-                ctx.fillText(imageLocation[index], 40, 2000 - 40);
+                offscreenCtx.restore();
+                offscreenCtx.font = "30px Arial";
+                offscreenCtx.fillStyle = "white";
+                offscreenCtx.fillText(imageLocation[index], 40, 2000 - 40);
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(offscreenCanvas, 0, 0);
 
                 if (index < imageFiles.length - 1) {
                     index++;

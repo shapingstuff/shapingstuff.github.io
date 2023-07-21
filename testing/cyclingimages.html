@@ -61,7 +61,6 @@
             setInterval(function () {
                 // Get the current image src.
                 var currentSrc = image.src;
-
                 // Cycle through the images.
                 if (currentSrc === image1.src) {
                     image.src = image2.src;
@@ -70,7 +69,6 @@
                 } else {
                     image.src = image1.src;
                 }
-
                 // Rotate the image by 90 degrees.
                 rotateImage(canvas, image, 0, 0, viewportWidth, viewportHeight);
             }, 500);

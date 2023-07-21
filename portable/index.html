@@ -3,40 +3,170 @@
 
 <head>
     <style>
-        .rotate_image {
-            -webkit-transform: rotate(270deg);
-            -moz-transform: rotate(270deg);
-            -ms-transform: rotate(270deg);
-            -o-transform: rotate(270deg);
-            transform: rotate(270deg);
+        body {
+            margin: 0;
+            overflow: hidden;
         }
 
-        h1 {
-            color: green;
+        canvas {
+            display: block;
         }
     </style>
 </head>
 
 <body>
-    Portable Camera
-    <center>
-        <img class="rotate_image" id="main" src="https://connected-display.herokuapp.com/uploads/display-london.jpg"
-            alt="Camera Image">
-    </center>
+    <canvas id="myCanvas"></canvas>
+    <script>
+
+        var previewImage = "https://connected-display.herokuapp.com/uploads/shelf-portable.jpg";
+        var previewText = "Preview - On the Move"
+        var imageFiles = [
+            "https://connected-display.herokuapp.com/uploads/shelf-newcastle.jpg",
+            "https://connected-display.herokuapp.com/uploads/shelf-liverpool.jpg",
+            "https://connected-display.herokuapp.com/uploads/shelf-london.jpg"
+        ];
+        var imageText = [
+            "CoCreate",
+            "Mike's Studio",
+            "Interaction Research Studio"
+        ];
+
+        var timeInMins = 5;
+        var previewUpdateTime = 2000;
+        var index = 0;
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+        var offscreenCanvas = document.createElement("canvas");
+        var offscreenCtx = offscreenCanvas.getContext("2d");
+        var intervalId = null;
+        var previewId = null;
+
+        var timer = false;
+        var touched = false;
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        offscreenCanvas.width = canvas.width;
+        offscreenCanvas.height = canvas.height;
+
+        timeInMins = 1 * 60000;
+        startSlideshow();
+
+        // display the rotated image with text on the screen
+        function displayImage(imageFile, text) {
+            var timestamp = new Date().getTime(); // force refresh from cache
+            var image = new Image();
+            image.src = imageFile + "?timestamp=" + timestamp;
+            image.onload = function () {
+                offscreenCtx.clearRect(0, 0, canvas.width, canvas.height);
+                offscreenCtx.save();
+                offscreenCtx.translate(canvas.width / 2, canvas.height / 2);
+                offscreenCtx.rotate((90 * Math.PI) / 180);
+
+                var x = 0;
+                var y = 0;
+                var width = 1500;
+                var height = 2000;
+
+                offscreenCtx.translate(x, y);
+                offscreenCtx.scale(width / image.height, height / image.width);
+
+                offscreenCtx.drawImage(
+                    image,
+                    -image.width / 2,
+                    -image.height / 2,
+                    image.width,
+                    image.height
+                );
+                offscreenCtx.restore();
+                offscreenCtx.font = "30px Arial";
+                offscreenCtx.fillStyle = "white";
+                offscreenCtx.fillText(text, 40, 2000 - 40);
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(offscreenCanvas, 0, 0);
+            }
+        }
+
+        // change index and refresh image
+        function refreshImage() {
+            console.log(index);
+
+            checkImageAvailability(imageFiles[index])
+                .then(function () {
+                    console.log("Image is available");
+                    // load image and change index for next
+                    displayImage(imageFiles[index], imageText[index]);
+                    if (index < imageFiles.length - 1) {
+                        index++;
+                    } else {
+                        index = 0;
+                    }
+                })
+                .catch(function () {
+                    console.log("Image is not available");
+                    // move on and refresh imediately
+                    if (index < imageFiles.length - 1) {
+                        index++;
+                    } else {
+                        index = 0;
+                    }
+                    refreshImage();
+                });
+        };
+
+        function preview() {
+            checkImageAvailability(previewImage)
+                .then(function () {
+                    console.log("Image is available");
+                    displayImage(previewImage, "Preview");
+                    console.log("preview update");
+                })
+                .catch(function () {
+                    console.log("Image is not available");
+                    displayImage("defaulterror.jpg", imageText[index]);
+                });
+        }
+
+        // Event listeners for touch and mouse press
+        canvas.addEventListener('touchstart', handleTouchStart);
+        canvas.addEventListener('mousedown', handleTouchStart);
+
+        function handleTouchStart(event) {
+            clearInterval(intervalId);
+            preview();
+            if (timer == false) {
+                setTimeout(startSlideshow, previewUpdateTime);
+                timer = true;
+            } else {
+
+            }
+        }
+
+        function startSlideshow() {
+            refreshImage();
+            intervalId = setInterval(refreshImage, timeInMins);
+            timer = false;
+        }
+
+        function checkImageAvailability(url) {
+            return fetch(url, { method: 'HEAD' })
+                .then(response => {
+                    if (response.ok) {
+                        // Image exists and was successfully fetched
+                        return Promise.resolve();
+                    } else {
+                        // Image does not exist or encountered an error (e.g., 404)
+                        return Promise.reject();
+                    }
+                })
+                .catch(() => {
+                    // Error occurred during fetch (network error, CORS, etc.)
+                    return Promise.reject();
+                });
+        }
+
+    </script>
 </body>
-
-<script>
-
-    setInterval(refreshImage, 5000)
-
-    function refreshImage(imgElement, imgURL) {
-        // create a new timestamp
-        console.log("refresh");
-        var timestamp = new Date().getTime();
-        var el = document.getElementById("main");
-        el.src = "https://connected-display.herokuapp.com/uploads/display-london.jpg?t=" + timestamp;
-    }
-
-</script>
 
 </html>
