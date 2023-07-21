@@ -18,6 +18,7 @@
     <canvas id="myCanvas"></canvas>
     <script>
 
+        // LONDON SHELF
         var previewImage = "https://connected-display.herokuapp.com/uploads/shelf-london.jpg";
         var previewText = "Preview - Interaction Research Studio"
         var imageFiles = [
@@ -119,7 +120,7 @@
             checkImageAvailability(previewImage)
                 .then(function () {
                     console.log("Image is available");
-                    displayImage(previewImage, "Preview");
+                    displayImage(previewImage, previewText);
                     console.log("preview update");
                 })
                 .catch(function () {

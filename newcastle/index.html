@@ -18,6 +18,7 @@
     <canvas id="myCanvas"></canvas>
     <script>
 
+        // NEWCASTLE SHELF
         var previewImage = "https://connected-display.herokuapp.com/uploads/shelf-newcastle.jpg";
         var previewText = "Preview - CoCreate Studio"
         var imageFiles = [
@@ -119,7 +120,7 @@
             checkImageAvailability(previewImage)
                 .then(function () {
                     console.log("Image is available");
-                    displayImage(previewImage, "Preview");
+                    displayImage(previewImage, previewText);
                     console.log("preview update");
                 })
                 .catch(function () {
