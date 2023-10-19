@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Display Images</title>
+</head>
+
+<body>
+    <h2>Images in the Folder</h2>
+    <div id="image-container">
+        <!-- Images will be displayed here -->
+    </div>
+
+    <script>
+        // Specify the relative path to the folder where images are stored
+        const folderPath = 'downloads/';
+
+        // Fetch a list of image files in the folder
+        fetchImages();
+
+        async function fetchImages() {
+            const response = await fetch(folderPath);
+            const data = await response.text();
+
+            // Split the response data into an array of filenames
+            const filenames = data.split('\n');
+
+            // Iterate through the filenames and create image elements
+            const imageContainer = document.getElementById('image-container');
+
+            filenames.forEach(filename => {
+                if (filename.trim() !== '') {
+                    const img = document.createElement('img');
+                    img.src = folderPath + filename;
+                    img.alt = filename;
+                    imageContainer.appendChild(img);
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
